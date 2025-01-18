@@ -31,7 +31,7 @@ custom_theme = Theme({
 console = Console(theme=custom_theme)
 
 
-async def main():
+async def main(query:str = None, email:str = None):
     """Run the ShopyAgent workflow with the given query and email."""
     logging.info("ShopyAgent is starting...")
 
@@ -50,15 +50,18 @@ async def main():
              return None
 
         agent = ShopyAgent()  # Initialize the ShopyAgent
-
-        query = input("Enter your product query: ")
-        email = input("Enter your email: ")
+        
+        if not query:
+            query = input("Enter your product query: ")
+        if not email:
+             email = input("Enter your email: ")
         final_state = await agent.run(query, email)  # Run the workflow
+        
 
         if isinstance(final_state, State):
             display_data = final_state.display_data
             if display_data:
-                if  display_data.get('best_product'): # Modified check
+                if display_data["products"] and display_data["best_product"]:
                     console.print(f"\n[bold]Here is what ShopyAgent suggests: [/bold] {display_data['best_product']['product_name']}")
 
                     md = Markdown(f"Justification:\n {display_data['best_product']['justification']}")
