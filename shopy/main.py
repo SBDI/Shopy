@@ -5,6 +5,8 @@ from typing import List, Dict, Optional, Any
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
+from rich.table import Table
+from rich.theme import Theme
 import logging
 
 # Absolute imports
@@ -13,7 +15,20 @@ from shopy.models import State
 from shopy.config import Config
 from shopy.agent import ShopyAgent
 from shopy.utils import clean_llm_output
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+
+# Define a custom theme
+custom_theme = Theme({
+    "info": "dim cyan",
+    "warning": "bold yellow",
+    "error": "bold red",
+    "success": "bold green",
+    "header": "bold magenta",
+    "best_product": "bold green",
+})
+
+console = Console(theme=custom_theme)
 
 
 async def main():
@@ -39,12 +54,11 @@ async def main():
         query = input("Enter your product query: ")
         email = input("Enter your email: ")
         final_state = await agent.run(query, email)  # Run the workflow
-        console = Console()
 
         if isinstance(final_state, State):
             display_data = final_state.display_data
             if display_data:
-                if display_data["products"] and display_data["best_product"]:
+                if  display_data.get('best_product'): # Modified check
                     console.print(f"\n[bold]Here is what ShopyAgent suggests: [/bold] {display_data['best_product']['product_name']}")
 
                     md = Markdown(f"Justification:\n {display_data['best_product']['justification']}")
@@ -55,9 +69,17 @@ async def main():
                     panel = Panel(md, title="YouTube Review Link", border_style="blue")
                     console.print(panel)
 
-                    md = Markdown(f"Comparisons: {str(display_data['comparison'])}")
-                    panel = Panel(md, title="Comparison:", border_style="blue")
-                    console.print(panel)
+                    # Create a table for product comparison
+                    table = Table(title="Product Comparisons",show_lines=True)
+                    table.add_column("Product Name", style="cyan")
+                    table.add_column("Rating", style="magenta")
+
+                    for item in display_data['comparison']:
+                        table.add_row(item.get('product_name', ''), str(item.get('rating', '')))
+                    console.print(table)
+
+                    console.print(f"\n[info]Summary:[/info]")
+                    clean_llm_output(display_data['summary'], console)
 
                 return final_state.dict()
         return {}

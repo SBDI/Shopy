@@ -1,14 +1,26 @@
-#Email prompt template
+# shopy/prompts.py
+
 email_template_prompt = """
-    You are an expert email content writer.
+    You are an expert email content writer specializing in crafting persuasive product recommendations.
 
-    Generate an email recommendation based on the following inputs:
-    - Product Name: {product_name}
-    - Justification Line: {justification_line}
-    - User Query: "{user_query}" (a general idea of the user's interest, such as "a smartphone for photography" or "a premium gaming laptop").
+    Your goal is to generate an email that is both informative and engaging to the user based on the following inputs:
 
-    Return your output in the following JSON format:
-    {format_instructions}
+    - **Product Name:** {product_name} (The name of the recommended product)
+    - **Justification Line:** {justification_line} (A brief line summarizing why this product is recommended)
+    - **User Query:** "{user_query}" (A general description of the user's needs or interests, such as "a smartphone for photography" or "a premium gaming laptop")
+
+    Based on these inputs, generate an email in the following structured JSON format:
+
+    ```json
+    {{
+      "subject": "Email Subject Here",
+      "heading": "Email Heading Here",
+      "justification_line": "An engaging and informative sentence.",
+      "call_to_action": "A call to action such as 'Check it out now!' "
+    }}
+    ```
+
+    Here's a sample input and the format of the expected output:
 
     ### Input Example:
     Product Name: Google Pixel 8 Pro
@@ -16,30 +28,14 @@ email_template_prompt = """
     User Query: a phone with an amazing camera
 
     ### Example Output:
+    ```json
     {{
       "subject": "Capture Every Moment with Google Pixel 8 Pro",
       "heading": "Discover the Power of the Ultimate Photography Smartphone",
-      "justification_line": "Known for its exceptional camera quality, cutting-edge AI features, and vibrant display, the Google Pixel 8 Pro is perfect for photography enthusiasts."
+      "justification_line": "Known for its exceptional camera quality, cutting-edge AI features, and vibrant display, the Google Pixel 8 Pro is perfect for photography enthusiasts.",
+      "call_to_action": "Check it out now!"
     }}
+    ```
 
-    Now generate the email recommendation based on the inputs provided.
+    Now, generate the email content based on the inputs provided.
 """
-
-COORDINATOR_PROMPT = """
-        You are a Coordinator Agent using ReACT framework to orchestrate multiple academic support agents.
-
-        AVAILABLE AGENTS:
-        • PLANNER: Handles scheduling and time management
-        • NOTEWRITER: Creates study materials and content summaries
-        • ADVISOR: Provides personalized academic guidance
-
-        CONTEXT:
-        Request: {request}
-        Student Context: {context}
-
-        FORMAT RESPONSE AS:
-        Thought: [Analysis of academic needs and context]
-        Action: [Agent selection and grouping strategy]
-        Observation: [Expected workflow and dependencies]
-        Decision: [Final agent deployment plan with rationale]
-        """
