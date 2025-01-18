@@ -1,4 +1,4 @@
-# config.py
+# shopy/config.py
 
 import os
 import logging
@@ -10,8 +10,7 @@ class Config:
     """A class to load and manage configuration settings from environment variables."""
     def __init__(self):
         # Construct the path to the .env file
-        env_path = Path(__file__).resolve().parent.parent.parent / ".env"  # Corrected path
-        logging.info(f"Loading .env from path: {env_path}")
+        env_path = Path(__file__).resolve().parent.parent / ".env"  # Corrected path
 
         config_vars = {}
         try:
@@ -34,7 +33,6 @@ class Config:
         self.youtube_api_key = config_vars.get("YOUTUBE_API_KEY")
         self.tavily_api_key = config_vars.get("TAVILY_API_KEY")
         self.google_api_key = config_vars.get("GOOGLE_API_KEY")
-        logging.info(f"Loaded GOOGLE_API_KEY: {self.google_api_key}") # Added logging
 
 
         self._validate_config()

@@ -1,5 +1,4 @@
 # main.py
-
 import asyncio
 import os
 from typing import List, Dict, Optional, Any
@@ -8,16 +7,16 @@ from rich.markdown import Markdown
 from rich.panel import Panel
 import logging
 
-# Relative imports based on your project structure
-from .llm import GeminiLLM, MockLLM
-from .models import State
-from .configs.config import Config
-from .agent import ShopyAgent
-from .utils.rich_utils import clean_llm_output # Modified import
+# Absolute imports
+from shopy.llm import GeminiLLM, MockLLM
+from shopy.models import State
+from shopy.config import Config
+from shopy.agent import ShopyAgent
+from shopy.utils import clean_llm_output
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-async def load_json_and_test(query, email):
+async def main():
     """Run the ShopyAgent workflow with the given query and email."""
     logging.info("ShopyAgent is starting...")
 
@@ -36,6 +35,9 @@ async def load_json_and_test(query, email):
              return None
 
         agent = ShopyAgent()  # Initialize the ShopyAgent
+
+        query = input("Enter your product query: ")
+        email = input("Enter your email: ")
         final_state = await agent.run(query, email)  # Run the workflow
         console = Console()
 
@@ -64,8 +66,3 @@ async def load_json_and_test(query, email):
         import traceback
         logging.error(traceback.format_exc())
         return None
-
-if __name__ == "__main__":
-    query = input("Enter your product query: ")
-    email = input("Enter your email: ")
-    asyncio.run(load_json_and_test(query, email))

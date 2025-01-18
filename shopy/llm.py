@@ -5,6 +5,7 @@ import os
 from dotenv import load_dotenv
 import logging
 import google.generativeai as genai
+from .exceptions import LLMError
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -18,7 +19,6 @@ class GeminiLLM:
         """Initialize GeminiLLM with API key from config."""
         load_dotenv()
         api_key = os.getenv('GOOGLE_API_KEY')
-        logging.info(f"GeminiLLM initialized Successfully with API key: {api_key}") # Added logging
         genai.configure(api_key=api_key)
         self.model = genai.GenerativeModel('gemini-pro')
         self._is_authenticated = False
@@ -65,8 +65,7 @@ class GeminiLLM:
             return response.text
         except Exception as e:
             logging.error(f"Error generating text with Gemini API: {e}")
-            return ""
-
+            raise LLMError(f"Error generating text with Gemini API: {e}")
 
 class MockLLM:
     """A mock LLM class for testing purposes."""
@@ -84,14 +83,18 @@ class MockLLM:
 
     async def agenerate(self, messages: List[Dict], temperature: Optional[float] = None) -> str:
         """A mock response from LLM, will respond based on the input message."""
-        if not messages:
-            return "Mock LLM: No message provided."
+        try:
+            if not messages:
+                return "Mock LLM: No message provided."
 
-        for msg in messages:
-            if "Plan" in msg["content"]:
-                return self.responses.get("plan", "Mock LLM response: Plan not found.")
-            if "materials" in msg["content"].lower():
-                return self.responses.get("materials", "Mock LLM response: Materials not found.")
-            if "strategies" in msg["content"].lower():
-                return self.responses.get("strategies", "Mock LLM response: Strategies not found.")
-        return "Mock LLM response: No matching message found."
+            for msg in messages:
+                if "Plan" in msg["content"]:
+                    return self.responses.get("plan", "Mock LLM response: Plan not found.")
+                if "materials" in msg["content"].lower():
+                    return self.responses.get("materials", "Mock LLM response: Materials not found.")
+                if "strategies" in msg["content"].lower():
+                    return self.responses.get("strategies", "Mock LLM response: Strategies not found.")
+            return "Mock LLM response: No matching message found."
+        except Exception as e:
+            logging.error(f"Error in mock LLM: {e}")
+            raise LLMError(f"Error in mock LLM: {e}")

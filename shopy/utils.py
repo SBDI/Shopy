@@ -1,3 +1,4 @@
+# shopy/utils.py
 import json
 import re
 from rich.console import Console

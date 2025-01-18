@@ -10,7 +10,7 @@
 *   **Intelligent Web Search:** Utilizes Tavily API for robust and comprehensive product searches.
 *   **Data Parsing & Structuring:** Employs AI models (Gemini) to structure and analyze product data.
 *   **Product Comparison:** Compares products based on specs and reviews to provide recommendations.
-*   **YouTube Review Integration:** Includes relevant YouTube review links for enhanced product insights.
+*  **YouTube Review Integration:** Includes relevant YouTube review links for enhanced product insights.
 *   **Personalized Recommendations:** Delivers tailored product recommendations based on user queries.
 *   **Email Delivery:** Optional email delivery of personalized recommendations (planned).
 
@@ -18,11 +18,11 @@
 
 Shopy is built as a multi-agent system using LangGraph, which enables a modular, scalable, and robust workflow. The main components are:
 
-*   **Tavily Search Agent:** Responsible for searching product information online.
-*   **Data Structuring Agent:** Maps the search results to a structured format.
-*   **Product Comparison Agent:** Compares products based on extracted data and available reviews.
-*   **YouTube Review Agent:** Fetches relevant video reviews from YouTube.
-*   **Email Agent:** (Planned) Sends personalized recommendations to users.
+*   **Tavily Search Tool:** Responsible for searching product information online.
+*   **Data Structuring Tool:** Maps the search results to a structured format.
+*   **Product Comparison Tool:** Compares products based on extracted data and available reviews.
+*   **YouTube Review Tool:** Fetches relevant video reviews from YouTube.
+*  **Email Agent** Sends personalized recommendations to users.
 
 ## Technologies Used
 
@@ -44,8 +44,8 @@ Shopy is built as a multi-agent system using LangGraph, which enables a modular,
 *   Git
 *   A Google Cloud Platform project with the Gemini API enabled and a valid API key.
 *   A Tavily API key
-*  A YouTube API Key
-*  A Gmail account with an App Password for email sending.
+*   A YouTube API key
+*   A Gmail account with an App Password for email sending.
 
 ### Setup
 
@@ -65,15 +65,15 @@ Shopy is built as a multi-agent system using LangGraph, which enables a modular,
     pip install -r requirements.txt
     ```
 4.  **Configure environment variables:**
-    * Create a `.env` file in the root directory.
-    * Add your API keys, Gmail username and app password:
-       ```
+    *   Create a `.env` file in the root directory.
+    *   Add your API keys, Gmail username and app password:
+        ```
         GOOGLE_API_KEY=YOUR_GOOGLE_API_KEY
         TAVILY_API_KEY=YOUR_TAVILY_API_KEY
         YOUTUBE_API_KEY=YOUR_YOUTUBE_API_KEY
         GMAIL_USER=YOUR_GMAIL_USER_NAME
         GMAIL_PASS=YOUR_GMAIL_APP_PASSWORD
-       ```
+        ```
 
 ### Running the Application
 
@@ -86,25 +86,6 @@ Shopy is built as a multi-agent system using LangGraph, which enables a modular,
     python -m shopy.main
     ```
 3.  Follow the prompts to enter your product query and email.
-
-Shopy/
-├── shopy/
-│ ├── pycache/
-│ ├── configs/
-│ │ └── config.py
-│ ├── utils/
-│ │ ├── init.py
-│ │ └── rich_utils.py
-│ ├── init.py
-│ ├── agent.py
-│ ├── llm.py
-│ ├── main.py
-│ ├── models.py
-│ └── prompts.py
-├── .env
-├── README.md
-└── requirements.txt
-
 
 ## Contributing
 
